@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <script>
+    // 双域名适配：国内站 daobox.net.cn / 海外站 daobox.app，门户与登录按当前域名自动选择
+    window.DB_HOME = location.hostname.indexOf('daobox.net.cn') !== -1
+      ? 'https://daobox.net.cn' : 'https://daobox.app';
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>华容道 · DaoBox 益智小游戏</title>
+  <meta name="description" content="DaoBox 华容道：数字华容道 3/4/5 阶 + 经典华容道（横刀立马），滑块移动帮助曹操逃生，老少皆宜的益智游戏！">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="theme-color" content="#92400e">
+  <link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">🧩 华容道</div>
+      <div class="topbar-tools"><span class="version-badge" id="app-version">v0.1.0</span><button class="refresh-btn" id="refresh-btn" type="button" title="强制刷新 · 清缓存重载" aria-label="强制刷新">↻</button></div>
+      <div class="topbar-slot" id="db-account-slot"></div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="mode-switch" role="tablist">
+      <button id="mode-number" class="mode-btn active" type="button">🔢 数字华容道</button>
+      <button id="mode-classic" class="mode-btn" type="button">⚔️ 经典华容道</button>
+    </section>
+
+    <section class="hud">
+      <div class="score-box">
+        <div class="score-label">步数</div>
+        <div class="score-value" id="moves">0</div>
+      </div>
+      <div class="score-box">
+        <div class="score-label">用时</div>
+        <div class="score-value" id="time">0:00</div>
+      </div>
+      <div class="score-box">
+        <div class="score-label">最少步纪录</div>
+        <div class="score-value" id="best">—</div>
+      </div>
+    </section>
+
+    <!-- 数字模式尺寸选择 -->
+    <section class="sub-switch" id="num-sizes">
+      <button class="sub-btn" data-size="3" type="button">3×3</button>
+      <button class="sub-btn active" data-size="4" type="button">4×4</button>
+      <button class="sub-btn" data-size="5" type="button">5×5</button>
+    </section>
+    <!-- 经典模式布局选择 -->
+    <section class="sub-switch hidden" id="classic-layouts">
+      <button class="sub-btn active" data-layout="hengdao" type="button">横刀立马</button>
+      <button class="sub-btn" data-layout="zhihui" type="button">指挥若定</button>
+    </section>
+
+    <div id="board" class="board" aria-label="华容道棋盘"></div>
+
+    <div id="win-banner" class="win-banner hidden">
+      <div class="win-emoji">🎉</div>
+      <div class="win-text" id="win-text">通关！</div>
+      <div class="win-sub" id="win-sub"></div>
+    </div>
+
+    <div class="btn-row">
+      <button id="btn-restart" class="btn primary" type="button">重新开始</button>
+    </div>
+
+    <section class="tips">
+      <h2>玩法说明</h2>
+      <ul>
+        <li><b>数字华容道</b>：点击与空格同行/同列的数字块即可滑动，把数字按 1、2、3… 排好即过关。阶数越高越难。</li>
+        <li><b>经典华容道</b>：点一下棋子会朝唯一可动方向滑动；也可按住拖动。把<b>曹操</b>移到底部出口即胜利。</li>
+        <li>步数越少越厉害，最少步纪录自动保存在本机。</li>
+      </ul>
+    </section>
+  </main>
+
+  <div id="time-lock" class="modal-mask hidden">
+    <div class="modal-card">
+      <div class="win-emoji">⏰</div>
+      <h3>今日免费时长已用完</h3>
+      <p>注册登录每天可获得更多时长。</p>
+      <div class="modal-btns">
+        <a id="lock-login" class="primary-btn" href="javascript:void(0)">注册 / 登录</a>
+        <button id="lock-close" class="secondary-btn" type="button">知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <a id="home-link" href="javascript:void(0)">← 返回 DaoBox 工具箱</a>
+    <span class="dot">·</span>
+    <span id="contact-email"></span>
+  </footer>
+
+  <script>
+    // 联系邮箱运行时拼接（防 Cloudflare obfuscate）
+    (function () {
+      var u = 'support', d = 'daobox.net.cn';
+      document.getElementById('contact-email').innerHTML =
+        '<a href="mailto:' + u + '@' + d + '">' + u + '@' + d + '</a>';
+    })();
+  </script>
+  <script src="app.js?v=1"></script>
+  <script>document.write('<script src="' + window.DB_HOME + '/portal.js" data-app="huarong"><\/script>');</script>
+  <script>
+    (function () {
+      var login = document.getElementById('lock-login');
+      if (login) login.href = window.DB_HOME + '/login?src=huarong';
+      var home = document.getElementById('home-link');
+      if (home) home.href = window.DB_HOME + '?src=huarong';
+    })();
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('./service-worker.js').catch(function () {});
+      });
+    }
+  </script>
+</body>
+</html>
