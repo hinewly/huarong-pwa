@@ -1,7 +1,7 @@
 /* 华容道 · DaoBox 家族（v0.1.0） */
 "use strict";
 
-var APP_VERSION = "v0.1.0";
+var APP_VERSION = "v0.1.1";
 var STORE_KEY = "dbyrd-save";
 
 var mode = "number";        // number | classic

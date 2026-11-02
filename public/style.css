@@ -31,7 +31,7 @@ body {
 .brand { font-size: 17px; font-weight: 700; }
 .topbar-tools { display: inline-flex; align-items: center; gap: 6px; }
 .version-badge { font-size: 11px; color: #6b7280; background: #f3f4f6; border-radius: 999px; padding: 3px 7px; }
-.refresh-btn { width: 26px; height: 26px; padding: 0; border: 1px solid #e5e7eb; border-radius: 999px; background: #fff; color: #6b7280; font-size: 15px; line-height: 1; cursor: pointer; }
+.refresh-btn { height: 26px; padding: 0 10px; border: 1px solid #e5e7eb; border-radius: 999px; background: #fff; color: #6b7280; font-size: 13px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
 .refresh-btn:hover { color: var(--accent); border-color: #fcd34d; }
 
 /* ---------- 主体 ---------- */
@@ -178,3 +178,7 @@ body {
 .footer a:hover { color: var(--accent); }
 .footer .dot { margin: 0 6px; }
 #contact-email a { color: var(--muted); }
+
+/* v更新按钮分层：手机端缩短文案 */
+.rb-short{display:none}
+@media (max-width:480px){.rb-full{display:none}.rb-short{display:inline}}
