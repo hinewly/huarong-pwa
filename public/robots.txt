@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://huarong.daobox.net.cn/sitemap.xml
